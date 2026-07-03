@@ -30,9 +30,13 @@ const useTableOfContents = (selector: string) => {
         const content = document.querySelector(selector)
         if (!content) return
         const intersectingList = intersectingListRef.current
-        const headers = content.querySelectorAll<HTMLElement>(
-            'h1, h2'
-        ) // keep the sidebar readable and avoid overly deep article outlines
+        const allHeaders = Array.from(content.querySelectorAll<HTMLElement>(
+            'h1, h2, h3'
+        ))
+        const firstH1Index = allHeaders.findIndex((header) => header.tagName === 'H1')
+        const headers = firstH1Index >= 0
+            ? allHeaders.filter((header, index) => header.tagName === 'H1' || (header.tagName === 'H2' && index < firstH1Index))
+            : allHeaders.filter((header) => header.tagName === 'H2' || header.tagName === 'H3')
 
         // set TableOfContents
         const tocData = Array.from(headers).map<TableOfContent>((header, i) => ({
