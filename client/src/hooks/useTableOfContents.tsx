@@ -31,7 +31,7 @@ const useTableOfContents = (selector: string) => {
         if (!content) return
         const intersectingList = intersectingListRef.current
         const headers = content.querySelectorAll<HTMLElement>(
-            'h1, h2, h3'
+            'h1, h2'
         ) // keep the sidebar readable and avoid overly deep article outlines
 
         // set TableOfContents
