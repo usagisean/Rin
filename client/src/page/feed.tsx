@@ -181,7 +181,7 @@ export function FeedPage({ id, TOC, clean }: { id: string, TOC: () => JSX.Elemen
         {feed && !error && (
           <>
             <div className="xl:w-64" />
-            <main className="wauto">
+            <main className="w-full md:w-11/12 lg:w-10/12 xl:w-8/12 2xl:w-7/12 max-w-6xl duration-300">
               <article
                 className="rounded-2xl bg-w m-2 px-6 py-4"
                 aria-label={feed.title ?? "Unnamed"}

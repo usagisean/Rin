@@ -135,19 +135,86 @@ ul {
   animation: anvil 0.3s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
 }
 
-.table {
-  @apply w-full border-collapse my-4;
-  overflow-x: auto;
-  display: block !important;
+.toc-content {
+  @apply text-[15px] leading-8 md:text-base;
+  overflow-wrap: break-word;
 }
 
-.table th,
-.table td {
-  @apply border border-slate-500 dark:border-slate-300 px-4 py-2;
+.toc-content h1,
+.toc-content h2,
+.toc-content h3 {
+  letter-spacing: -0.01em;
 }
 
-.table th {
-  @apply bg-slate-200 dark:bg-slate-700;
+.toc-content img {
+  @apply shadow-light;
+}
+
+.markdown-table-wrap {
+  @apply my-5 w-full overflow-x-auto rounded-2xl border border-neutral-200 bg-white/70 shadow-sm dark:border-neutral-700 dark:bg-neutral-900/40;
+  scrollbar-width: thin;
+}
+
+.markdown-table {
+  min-width: 1000px;
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  display: table !important;
+}
+
+.markdown-table th,
+.markdown-table td {
+  @apply border-b border-r border-neutral-200 px-4 py-3 align-middle leading-7 dark:border-neutral-700;
+}
+
+.markdown-table th {
+  @apply bg-slate-200/90 text-center font-bold text-slate-700 dark:bg-slate-800 dark:text-slate-100;
+}
+
+.markdown-table td {
+  @apply bg-white/60 dark:bg-neutral-900/20;
+}
+
+.markdown-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.markdown-table th:last-child,
+.markdown-table td:last-child {
+  border-right: 0;
+}
+
+.markdown-table td:first-child,
+.markdown-table th:first-child,
+.markdown-table td:last-child,
+.markdown-table th:last-child {
+  @apply text-center;
+  white-space: nowrap;
+}
+
+.bwh-buy-link {
+  @apply inline-flex items-center justify-center rounded-full bg-theme px-4 py-2 text-sm font-bold text-white no-underline shadow-sm transition hover:bg-theme-hover hover:no-underline active:bg-theme-active;
+  color: #fff !important;
+  white-space: nowrap;
+}
+
+.bwh-buy-link:after {
+  content: "↗";
+  margin-left: 0.35rem;
+  font-size: 0.8em;
+  opacity: 0.9;
+}
+
+@media (max-width: 640px) {
+  .markdown-table {
+    min-width: 880px;
+  }
+
+  .markdown-table th,
+  .markdown-table td {
+    @apply px-3 py-2 text-sm;
+  }
 }
 
 /* TOC Style */

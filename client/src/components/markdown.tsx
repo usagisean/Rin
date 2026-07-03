@@ -238,7 +238,7 @@ export function Markdown({ content }: { content: string }) {
         blockquote({ children, ...props }) {
           return (
             <blockquote
-              className="border-l-4 border-gray-300 dark:border-gray-500 pl-4 italic text-gray-500 dark:text-gray-400"
+              className="my-4 rounded-xl border-l-4 border-theme/80 bg-neutral-100/80 px-4 py-3 leading-8 text-gray-600 dark:bg-neutral-800/70 dark:text-gray-300"
               {...props}
             >
               {children}
@@ -284,10 +284,40 @@ export function Markdown({ content }: { content: string }) {
             </li>
           );
         },
-        a({ children, ...props }) {
+        a({ children, href, className, target, rel, ...props }) {
+          const normalizedHref = href || "";
+          const isInternalGoLink =
+            normalizedHref.startsWith("/go/") ||
+            /^https?:\/\/blog\.zxaihub\.com\/go\//.test(normalizedHref);
+          const isExternalLink =
+            /^https?:\/\//.test(normalizedHref) &&
+            !/^https?:\/\/blog\.zxaihub\.com(\/|$)/.test(normalizedHref);
+          const shouldOpenNewTab = isInternalGoLink || isExternalLink;
+          const safeRel = shouldOpenNewTab
+            ? Array.from(
+              new Set(
+                [
+                  ...(rel ? rel.split(/\s+/) : []),
+                  ...(isInternalGoLink ? ["nofollow", "sponsored"] : []),
+                  "noopener",
+                  "noreferrer",
+                ].filter(Boolean)
+              )
+            ).join(" ")
+            : rel;
+          const linkClassName = [
+            className,
+            "text-[#0686c8] dark:text-[#2590f1] hover:underline",
+            isInternalGoLink ? "bwh-buy-link" : "",
+          ]
+            .filter(Boolean)
+            .join(" ");
           return (
             <a
-              className="text-[#0686c8] dark:text-[#2590f1] hover:underline"
+              href={href}
+              target={shouldOpenNewTab ? "_blank" : target}
+              rel={safeRel}
+              className={linkClassName}
               {...props}
             >
               {children}
@@ -299,7 +329,7 @@ export function Markdown({ content }: { content: string }) {
             <h1
               id={children?.toString()}
               {...props}
-              className={`${props.className || ""} text-3xl font-bold mt-4`.trim()}
+              className={`${props.className || ""} text-3xl font-bold mt-10 mb-4 pb-3 border-b border-neutral-200 dark:border-neutral-700`.trim()}
               style={{ ...props.style, scrollMarginTop: "var(--header-scroll-offset, 7rem)" }}
             >
               {children}
@@ -311,7 +341,7 @@ export function Markdown({ content }: { content: string }) {
             <h2
               id={children?.toString()}
               {...props}
-              className={`${props.className || ""} text-2xl font-bold mt-4`.trim()}
+              className={`${props.className || ""} text-2xl font-bold mt-8 mb-3 pl-3 border-l-4 border-theme/80`.trim()}
               style={{ ...props.style, scrollMarginTop: "var(--header-scroll-offset, 7rem)" }}
             >
               {children}
@@ -323,7 +353,7 @@ export function Markdown({ content }: { content: string }) {
             <h3
               id={children?.toString()}
               {...props}
-              className={`${props.className || ""} text-xl font-bold mt-4`.trim()}
+              className={`${props.className || ""} text-xl font-bold mt-6 mb-2`.trim()}
               style={{ ...props.style, scrollMarginTop: "var(--header-scroll-offset, 7rem)" }}
             >
               {children}
@@ -368,7 +398,7 @@ export function Markdown({ content }: { content: string }) {
         },
         p({ children, node, ...props }) {
           return (
-            <p className="mt-2 py-1" {...props}>
+            <p className="mt-2 py-1 leading-8" {...props}>
               {children}
             </p>
           );
@@ -376,7 +406,13 @@ export function Markdown({ content }: { content: string }) {
         hr({ children, ...props }) {
           return <hr className="my-4" {...props} />;
         },
-        table: ({ node, ...props }) => <table className="table" {...props} />,
+        table: ({ node, children, ...props }) => (
+          <div className="markdown-table-wrap">
+            <table className="markdown-table" {...props}>
+              {children}
+            </table>
+          </div>
+        ),
         th: ({ node, ...props }) => (
           <th className="px-4 py-2 border bg-gray-600" {...props} />
         ),
